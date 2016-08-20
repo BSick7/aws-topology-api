@@ -5,11 +5,11 @@ package api
 ///   - ec2:DescribeInstancesPages
 
 import (
+	"fmt"
 	"github.com/BSick7/aws-topology-api/services"
 	"github.com/BSick7/aws-topology-api/types"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/ec2"
-	"github.com/hashicorp/go-multierror"
 )
 
 func getInstances(b *services.Broker, vpcId string) ([]*types.Resource, error) {
@@ -22,31 +22,21 @@ func getInstances(b *services.Broker, vpcId string) ([]*types.Resource, error) {
 			},
 		},
 	}
-	var errs error
 	mapInstanceFn := func(p *ec2.DescribeInstancesOutput, lastPage bool) bool {
 		for _, reservation := range p.Reservations {
 			for _, instance := range reservation.Instances {
-				resource, err := mapInstance(instance)
-				if err != nil {
-					errs = multierror.Append(errs, err)
-				}
-				all = append(all, resource)
+				all = append(all, mapInstance(b, instance))
 			}
 		}
 		return true
 	}
 	err := b.EC2().DescribeInstancesPages(input, mapInstanceFn)
-	if err != nil {
-		errs = multierror.Append(errs, err)
-	}
-	return all, errs
+	return all, err
 }
 
-func mapInstance(instance *ec2.Instance) (*types.Resource, error) {
-	resource, err := types.NewResource(*instance.InstanceId, "", types.ResourceTypeInstance)
-	if err != nil {
-		return nil, err
-	}
+func mapInstance(b *services.Broker, instance *ec2.Instance) *types.Resource {
+	arn := fmt.Sprintf("arn:aws:ec2:%s:%s:instance/%s", b.Region(), b.AccountId(), *instance.InstanceId)
+	resource := types.NewResource(*instance.InstanceId, arn, types.ResourceTypeInstance)
 
 	m := resource.Metadata
 	m["vpc_id"] = *instance.VpcId
@@ -79,5 +69,5 @@ func mapInstance(instance *ec2.Instance) (*types.Resource, error) {
 	}
 	m["security_groups"] = securityGroups
 
-	return resource, nil
+	return resource
 }

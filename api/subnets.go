@@ -5,11 +5,11 @@ package api
 ///   - ec2:DescribeSubnets
 
 import (
+	"fmt"
 	"github.com/BSick7/aws-topology-api/services"
 	"github.com/BSick7/aws-topology-api/types"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/ec2"
-	"github.com/hashicorp/go-multierror"
 )
 
 func getSubnets(b *services.Broker, vpcId string) ([]*types.Resource, error) {
@@ -26,27 +26,20 @@ func getSubnets(b *services.Broker, vpcId string) ([]*types.Resource, error) {
 		return all, err
 	}
 
-	var errs error
 	for _, subnet := range out.Subnets {
-		resource, err := mapSubnet(subnet)
-		if err != nil {
-			errs = multierror.Append(errs, err)
-		}
-		all = append(all, resource)
+		all = append(all, mapSubnet(b, subnet))
 	}
-	return all, errs
+	return all, nil
 }
 
-func mapSubnet(subnet *ec2.Subnet) (*types.Resource, error) {
-	resource, err := types.NewResource(*subnet.SubnetId, "", types.ResourceTypeSubnet)
-	if err != nil {
-		return nil, err
-	}
+func mapSubnet(b *services.Broker, subnet *ec2.Subnet) *types.Resource {
+	arn := fmt.Sprintf("arn:aws:ec2:%s:%s:subnet/%s", b.Region(), b.AccountId(), *subnet.SubnetId)
+	resource := types.NewResource(*subnet.SubnetId, arn, types.ResourceTypeSubnet)
 
 	m := resource.Metadata
 	m["vpc_id"] = *subnet.VpcId
 	m["cidr"] = *subnet.CidrBlock
 	m["availability_zone"] = *subnet.AvailabilityZone
 
-	return resource, nil
+	return resource
 }

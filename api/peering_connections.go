@@ -5,10 +5,10 @@ package api
 ///   - ec2:DescribeVpcPeeringConnections
 
 import (
+	"fmt"
 	"github.com/BSick7/aws-topology-api/services"
 	"github.com/BSick7/aws-topology-api/types"
 	"github.com/aws/aws-sdk-go/service/ec2"
-	"github.com/hashicorp/go-multierror"
 )
 
 func getVpcPeeringConnections(b *services.Broker) ([]*types.Resource, error) {
@@ -20,21 +20,15 @@ func getVpcPeeringConnections(b *services.Broker) ([]*types.Resource, error) {
 
 	var errs error
 	for _, pcx := range res.VpcPeeringConnections {
-		resource, err := mapPcx(pcx)
-		if err != nil {
-			errs = multierror.Append(errs, err)
-		}
-		resources = append(resources, resource)
+		resources = append(resources, mapPcx(b, pcx))
 	}
 
 	return resources, errs
 }
 
-func mapPcx(pcx *ec2.VpcPeeringConnection) (*types.Resource, error) {
-	resource, err := types.NewResource(*pcx.VpcPeeringConnectionId, "", types.ResourceTypeVpcPeeringConnection)
-	if err != nil {
-		return nil, err
-	}
+func mapPcx(b *services.Broker, pcx *ec2.VpcPeeringConnection) *types.Resource {
+	arn := fmt.Sprintf("arn:aws:ec2:%s:%s:vpc-peering-connection/%s", b.Region(), b.AccountId(), *pcx.VpcPeeringConnectionId)
+	resource := types.NewResource(*pcx.VpcPeeringConnectionId, arn, types.ResourceTypeVpcPeeringConnection)
 
 	avi := pcx.AccepterVpcInfo
 	if avi != nil {
@@ -55,5 +49,5 @@ func mapPcx(pcx *ec2.VpcPeeringConnection) (*types.Resource, error) {
 		resource.Metadata["status_message"] = *pcx.Status.Message
 	}
 
-	return resource, nil
+	return resource
 }

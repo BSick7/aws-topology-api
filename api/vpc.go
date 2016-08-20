@@ -5,6 +5,7 @@ package api
 ///   - ec2:DescribeVpcs
 
 import (
+	"fmt"
 	"github.com/BSick7/aws-topology-api/services"
 	"github.com/BSick7/aws-topology-api/types"
 	"github.com/aws/aws-sdk-go/aws"
@@ -28,10 +29,8 @@ func getVpcNode(b *services.Broker, vpcId string) (*types.Resource, error) {
 	}
 
 	vpc := res.Vpcs[0]
-	node, err := types.NewResource(*vpc.VpcId, "", types.ResourceTypeVpc)
-	if err != nil {
-		return nil, err
-	}
+	arn := fmt.Sprintf("arn:aws:ec2:%s:%s:vpc/%s", b.Region(), b.AccountId(), *vpc.VpcId)
+	node := types.NewResource(*vpc.VpcId, arn, types.ResourceTypeVpc)
 
 	node.Metadata["cidr"] = *vpc.CidrBlock
 	node.Metadata["tenancy"] = *vpc.InstanceTenancy

@@ -7,6 +7,10 @@ import (
 )
 
 func GetVpcTopology(b *services.Broker, vpcId string) (types.Topology, error) {
+	if err := b.Init(); err != nil {
+		return types.Topology{}, err
+	}
+
 	vpc, err := getVpcNode(b, vpcId)
 	if err != nil {
 		return types.Topology{}, err
