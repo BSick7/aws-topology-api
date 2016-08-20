@@ -12,48 +12,48 @@ import (
 )
 
 func getVpcPeeringConnections(b *services.Broker) ([]*types.Resource, error) {
-	nodes := []*types.Resource{}
+	resources := []*types.Resource{}
 	res, err := b.EC2().DescribeVpcPeeringConnections(&ec2.DescribeVpcPeeringConnectionsInput{})
 	if err != nil {
-		return nodes, err
+		return resources, err
 	}
 
 	var errs error
 	for _, pcx := range res.VpcPeeringConnections {
-		node, err := mapPcx(pcx)
+		resource, err := mapPcx(pcx)
 		if err != nil {
 			errs = multierror.Append(errs, err)
 		}
-		nodes = append(nodes, node)
+		resources = append(resources, resource)
 	}
 
-	return nodes, errs
+	return resources, errs
 }
 
 func mapPcx(pcx *ec2.VpcPeeringConnection) (*types.Resource, error) {
-	node, err := types.NewNode(*pcx.VpcPeeringConnectionId, "", types.ResourceTypeVpcPeeringConnection)
+	resource, err := types.NewResource(*pcx.VpcPeeringConnectionId, "", types.ResourceTypeVpcPeeringConnection)
 	if err != nil {
 		return nil, err
 	}
 
 	avi := pcx.AccepterVpcInfo
 	if avi != nil {
-		node.Metadata["accepter_vpc_id"] = *avi.VpcId
-		node.Metadata["accepter_vpc_cidr"] = *avi.CidrBlock
-		node.Metadata["accepter_owner_id"] = *avi.OwnerId
+		resource.Metadata["accepter_vpc_id"] = *avi.VpcId
+		resource.Metadata["accepter_vpc_cidr"] = *avi.CidrBlock
+		resource.Metadata["accepter_owner_id"] = *avi.OwnerId
 	}
 
 	rvi := pcx.RequesterVpcInfo
 	if rvi != nil {
-		node.Metadata["requester_vpc_id"] = *rvi.VpcId
-		node.Metadata["requester_vpc_cidr"] = *rvi.CidrBlock
-		node.Metadata["requester_owner_id"] = *rvi.OwnerId
+		resource.Metadata["requester_vpc_id"] = *rvi.VpcId
+		resource.Metadata["requester_vpc_cidr"] = *rvi.CidrBlock
+		resource.Metadata["requester_owner_id"] = *rvi.OwnerId
 	}
 
 	if pcx.Status != nil {
-		node.Metadata["status_code"] = *pcx.Status.Code
-		node.Metadata["status_message"] = *pcx.Status.Message
+		resource.Metadata["status_code"] = *pcx.Status.Code
+		resource.Metadata["status_message"] = *pcx.Status.Message
 	}
 
-	return node, nil
+	return resource, nil
 }

@@ -28,7 +28,7 @@ func getVpcNode(b *services.Broker, vpcId string) (*types.Resource, error) {
 	}
 
 	vpc := res.Vpcs[0]
-	node, err := types.NewNode(*vpc.VpcId, "", types.ResourceTypeVpc)
+	node, err := types.NewResource(*vpc.VpcId, "", types.ResourceTypeVpc)
 	if err != nil {
 		return nil, err
 	}
