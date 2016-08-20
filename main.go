@@ -22,6 +22,11 @@ func main() {
 	meta := *metaPtr
 
 	c.Commands = map[string]cli.CommandFactory{
+		"vpc": func() (cli.Command, error) {
+			return &command.VpcCommand{
+				Meta: meta,
+			}, nil
+		},
 		"serve": func() (cli.Command, error) {
 			return &command.ServeCommand{
 				Meta: meta,
