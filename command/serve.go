@@ -1,17 +1,14 @@
 package command
 
 import (
-	"fmt"
-	"github.mdl.zone/deployer/deploy/agent"
-	"github.mdl.zone/deployer/deploy/types"
 	"strings"
 )
 
-type AgentCommand struct {
+type ServeCommand struct {
 	Meta
 }
 
-func (c *AgentCommand) Run(args []string) int {
+func (c *ServeCommand) Run(args []string) int {
 	flags := c.Meta.FlagSet("agent")
 	var configLoc string
 	var bindAddr string
@@ -26,36 +23,16 @@ func (c *AgentCommand) Run(args []string) int {
 		return 1
 	}
 
-	ac, err := types.NewAgentConfigFromLocation(configLoc)
-	if err != nil {
-		c.Ui.Error(fmt.Sprintf("error reading configuration [%s]: %s", configLoc, err))
-		return 1
-	}
-	ac.Merge(&types.AgentConfig{
-		Bind: types.AgentConfigBind{
-			Address: bindAddr,
-			Port:    bindPort,
-		},
-	})
-	if err := ac.Validate(); err != nil {
-		c.Ui.Error(err.Error())
-		return 1
-	}
-
-	if err := agent.Run(ac, c.Meta.Version); err != nil {
-		c.Ui.Error(fmt.Sprintf("error running agent: %s", err))
-		return 1
-	}
 	return 0
 }
 
-func (c *AgentCommand) Synopsis() string {
-	return "Run deploy agent"
+func (c *ServeCommand) Synopsis() string {
+	return "Run aws-topology-api server"
 }
 
-func (c *AgentCommand) Help() string {
+func (c *ServeCommand) Help() string {
 	helpText := `
-Usage: deploy agent [options]
+Usage: aws-topology-api serve [options]
 
 Agent Options:
 

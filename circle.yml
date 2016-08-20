@@ -3,11 +3,6 @@ machine:
     GOPATH: "$HOME/.go_workspace"
     IMPORT_PATH: "github.mdl.zone/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME"
     BUILD_PATH: "$GOPATH/src/$IMPORT_PATH"
-    POSTGRES_URL: postgres://ubuntu@127.0.0.1:5432/circle_test
-    GITHUB_API: https://github.mdl.zone/api/v3/
-  services:
-    - postgresql
-    - docker
 
 checkout:
   post:
@@ -24,7 +19,6 @@ dependencies:
   override:
     - cd "$BUILD_PATH" && make deps
     - cd "$BUILD_PATH" && make build
-    - cd "$BUILD_PATH" && make docker-build
 
 test:
   override:
@@ -38,4 +32,3 @@ deployment:
     branch: master
     commands:
       - cd "$BUILD_PATH" && make release
-      - cd "$BUILD_PATH" && make push
