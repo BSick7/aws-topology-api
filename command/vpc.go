@@ -28,19 +28,19 @@ func (c *VpcCommand) Run(args []string) int {
 	}
 
 	b := services.NewBroker(nil)
-	root, err := api.GetVpcTopology(b, vpcId)
+	topo, err := api.GetVpcTopology(b, vpcId)
 	if err != nil {
 		c.Ui.Error(err.Error())
 		return 1
 	}
 
-	output, err := json.MarshalIndent(root, "", "  ")
+	output, err := json.MarshalIndent(topo, "", "  ")
 	if err != nil {
 		c.Ui.Error(err.Error())
 		return 1
 	}
-
 	c.Ui.Output(string(output))
+
 	return 0
 }
 

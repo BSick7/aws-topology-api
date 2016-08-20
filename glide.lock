@@ -1,5 +1,5 @@
-hash: 208cb7b20900088bb48c57b9d0a0ec36c4b1c707f719f6f0cc054e80bb71fdba
-updated: 2016-08-20T08:47:25.6247106-04:00
+hash: 0ad5f8f0c816b3da3281419258c5bb97a206cb4350e8d20db3d14383364964f4
+updated: 2016-08-20T10:53:59.9545449-04:00
 imports:
 - name: github.com/armon/go-radix
   version: 4239b77079c7b5d1243b7b4736304ce8ddb6f0f2
@@ -8,33 +8,35 @@ imports:
   subpackages:
   - aws
   - aws/awserr
-  - aws/session
   - service/ec2
   - aws/credentials
-  - aws/client
-  - aws/corehandlers
-  - aws/credentials/stscreds
-  - aws/defaults
-  - aws/request
-  - private/endpoints
+  - aws/session
   - aws/awsutil
+  - aws/client
   - aws/client/metadata
+  - aws/request
   - aws/signer/v4
+  - private/endpoints
   - private/protocol
   - private/protocol/ec2query
   - private/waiter
+  - aws/corehandlers
+  - aws/credentials/stscreds
+  - aws/defaults
+  - private/protocol/rest
+  - private/protocol/query/queryutil
+  - private/protocol/xml/xmlutil
   - service/sts
   - aws/credentials/ec2rolecreds
   - aws/credentials/endpointcreds
   - aws/ec2metadata
-  - private/protocol/rest
-  - private/protocol/query/queryutil
-  - private/protocol/xml/xmlutil
   - private/protocol/query
 - name: github.com/bgentry/speakeasy
   version: a1ccbf2c40dfc8ce514b5c5c6e6d1429ea6880da
 - name: github.com/go-ini/ini
   version: a2610b3a793cfa7fdf0b07038068af5ddc12aba1
+- name: github.com/hashicorp/go-multierror
+  version: 8c5f0ad9360406a3807ce7de6bc73269a91a6e51
 - name: github.com/hashicorp/go-uuid
   version: 64130c7a86d732268a38cb04cfbaf0cc987fda98
 - name: github.com/jmespath/go-jmespath

@@ -1,6 +1,6 @@
 package api
 
-/// Collects vpc topology
+/// Collects vpc
 /// IAM Requirements:
 ///   - ec2:DescribeVpcs
 
