@@ -2,7 +2,7 @@ package types
 
 import "github.com/hashicorp/go-uuid"
 
-type Node struct {
+type Resource struct {
 	Uid          string            `json:"uid"`
 	Id           string            `json:"id"`
 	Arn          string            `json:"arn"`
@@ -12,14 +12,14 @@ type Node struct {
 	ChildrenUids []string          `json:"childrenUids"`
 }
 
-func NewNode(awsId string, arn string, ntype string) (*Node, error) {
+func NewNode(awsId string, arn string, ntype string) (*Resource, error) {
 	uid, err := uuid.GenerateUUID()
-	return &Node{
+	return &Resource{
 		Uid:          uid,
 		Id:           awsId,
 		Arn:          arn,
 		Type:         ntype,
-		Metadata:     map[string]interface{}{},
+		Metadata:     map[string]string{},
 		LinkUids:     []string{},
 		ChildrenUids: []string{},
 	}, err

@@ -1,6 +1,6 @@
 package types
 
 type Topology struct {
-	Vpc       *Node
-	Resources []*Node
+	Vpc       *Resource
+	Resources []*Resource
 }

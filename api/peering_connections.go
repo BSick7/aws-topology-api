@@ -11,8 +11,8 @@ import (
 	"github.com/hashicorp/go-multierror"
 )
 
-func getVpcPeeringConnections(b *services.Broker) ([]*types.Node, error) {
-	nodes := []*types.Node{}
+func getVpcPeeringConnections(b *services.Broker) ([]*types.Resource, error) {
+	nodes := []*types.Resource{}
 	res, err := b.EC2().DescribeVpcPeeringConnections(&ec2.DescribeVpcPeeringConnectionsInput{})
 	if err != nil {
 		return nodes, err
@@ -30,8 +30,8 @@ func getVpcPeeringConnections(b *services.Broker) ([]*types.Node, error) {
 	return nodes, errs
 }
 
-func mapPcx(pcx *ec2.VpcPeeringConnection) (*types.Node, error) {
-	node, err := types.NewNode(*pcx.VpcPeeringConnectionId, "", types.NodeTypeVpcPeeringConnection)
+func mapPcx(pcx *ec2.VpcPeeringConnection) (*types.Resource, error) {
+	node, err := types.NewNode(*pcx.VpcPeeringConnectionId, "", types.ResourceTypeVpcPeeringConnection)
 	if err != nil {
 		return nil, err
 	}
@@ -51,8 +51,8 @@ func mapPcx(pcx *ec2.VpcPeeringConnection) (*types.Node, error) {
 	}
 
 	if pcx.Status != nil {
-		node.Metadata["status_code"] = pcx.Status.Code
-		node.Metadata["status_message"] = pcx.Status.Message
+		node.Metadata["status_code"] = *pcx.Status.Code
+		node.Metadata["status_message"] = *pcx.Status.Message
 	}
 
 	return node, nil

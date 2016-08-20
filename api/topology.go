@@ -8,10 +8,13 @@ import (
 func GetVpcTopology(b *services.Broker, vpcId string) (types.Topology, error) {
 	vpc, err := getVpcNode(b, vpcId)
 	if err != nil {
-		return nil, []*types.Node{}, err
+		return types.Topology{}, err
+	}
+	if vpc == nil {
+		return types.Topology{}, nil
 	}
 
-	resources := []*types.Node{}
+	resources := []*types.Resource{}
 
 	pcxs, err := getVpcPeeringConnections(b)
 	for _, pcx := range pcxs {
