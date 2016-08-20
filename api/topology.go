@@ -18,6 +18,7 @@ func GetVpcTopology(b *services.Broker, vpcId string) (types.Topology, error) {
 	resources := []*types.Resource{}
 	var errs error
 
+	// Peering Connections
 	pcxs, err := getVpcPeeringConnections(b)
 	if err != nil {
 		errs = multierror.Append(errs, err)
@@ -28,11 +29,19 @@ func GetVpcTopology(b *services.Broker, vpcId string) (types.Topology, error) {
 		}
 	}
 
+	// Instances
 	instances, err := getInstances(b, vpc.Id)
 	if err != nil {
 		errs = multierror.Append(errs, err)
 	}
 	resources = append(resources, instances...)
+
+	// Subnets
+	subnets, err := getSubnets(b, vpc.Id)
+	if err != nil {
+		errs = multierror.Append(errs, err)
+	}
+	resources = append(resources, subnets...)
 
 	return types.Topology{
 		Vpc:       vpc,
