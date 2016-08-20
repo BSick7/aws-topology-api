@@ -1,6 +1,6 @@
 package api
 
-/// Collects vpc topology
+/// Collects vpc
 /// IAM Requirements:
 ///   - ec2:DescribeVpcs
 
@@ -12,7 +12,7 @@ import (
 	"github.com/aws/aws-sdk-go/service/ec2"
 )
 
-func getVpcNode(b *services.Broker, vpcId string) (*types.Node, error) {
+func getVpcNode(b *services.Broker, vpcId string) (*types.Resource, error) {
 	res, err := b.EC2().DescribeVpcs(&ec2.DescribeVpcsInput{
 		VpcIds: []*string{aws.String(vpcId)},
 	})
@@ -28,7 +28,7 @@ func getVpcNode(b *services.Broker, vpcId string) (*types.Node, error) {
 	}
 
 	vpc := res.Vpcs[0]
-	node, err := types.NewNode(*vpc.VpcId, "", types.NodeTypeVpc)
+	node, err := types.NewNode(*vpc.VpcId, "", types.ResourceTypeVpc)
 	if err != nil {
 		return nil, err
 	}
