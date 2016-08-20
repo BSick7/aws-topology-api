@@ -1,7 +1,7 @@
 package command
 
 import (
-	"fmt"
+	"encoding/json"
 	"github.com/BSick7/aws-topology-api/api"
 	"github.com/BSick7/aws-topology-api/services"
 	"github.com/mitchellh/cli"
@@ -34,7 +34,13 @@ func (c *VpcCommand) Run(args []string) int {
 		return 1
 	}
 
-	c.Ui.Output(fmt.Sprintf("%+v\n", root))
+	output, err := json.MarshalIndent(root, "", "  ")
+	if err != nil {
+		c.Ui.Error(err.Error())
+		return 1
+	}
+
+	c.Ui.Output(string(output))
 	return 0
 }
 
