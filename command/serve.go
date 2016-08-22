@@ -1,6 +1,9 @@
 package command
 
 import (
+	"fmt"
+	"github.com/BSick7/aws-topology-api/agent"
+	"github.com/BSick7/aws-topology-api/types"
 	"strings"
 )
 
@@ -23,6 +26,26 @@ func (c *ServeCommand) Run(args []string) int {
 		return 1
 	}
 
+	ac, err := types.NewAgentConfigFromLocation(configLoc)
+	if err != nil {
+		c.Ui.Error(fmt.Sprintf("error reading configuration [%s]: %s", configLoc, err))
+		return 1
+	}
+	ac.Merge(&types.AgentConfig{
+		Bind: types.AgentConfigBind{
+			Address: bindAddr,
+			Port:    bindPort,
+		},
+	})
+	if err := ac.Validate(); err != nil {
+		c.Ui.Error(err.Error())
+		return 1
+	}
+
+	if err := agent.Run(ac, c.Meta.Version); err != nil {
+		c.Ui.Error(fmt.Sprintf("error running agent: %s", err))
+		return 1
+	}
 	return 0
 }
 
