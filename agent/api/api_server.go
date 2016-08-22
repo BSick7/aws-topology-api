@@ -26,6 +26,7 @@ func (a *ApiServer) Register() {
 		Route{"GET", "/", "index", a.Index},
 		RouteGroup{"/v1", []RouterItem{
 			Route{"GET", "/", "v1", a.Root("v1")},
+			Route{"GET", "/vpcs/{vpc-id}", "vpc", a.Vpc},
 		}},
 	}
 
