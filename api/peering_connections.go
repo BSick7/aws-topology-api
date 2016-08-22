@@ -11,7 +11,7 @@ import (
 	"github.com/aws/aws-sdk-go/service/ec2"
 )
 
-func getVpcPeeringConnections(b *services.Broker) ([]*types.Resource, error) {
+func getPeeringConnections(b *services.Broker) ([]*types.Resource, error) {
 	resources := []*types.Resource{}
 	res, err := b.EC2().DescribeVpcPeeringConnections(&ec2.DescribeVpcPeeringConnectionsInput{})
 	if err != nil {
@@ -26,8 +26,12 @@ func getVpcPeeringConnections(b *services.Broker) ([]*types.Resource, error) {
 	return resources, errs
 }
 
+func genPeeringConnectionArn(region string, accountId string, pcxId string) string {
+	return fmt.Sprintf("arn:aws:ec2:%s:%s:vpc-peering-connection/%s", region, accountId, pcxId)
+}
+
 func mapPcx(b *services.Broker, pcx *ec2.VpcPeeringConnection) *types.Resource {
-	arn := fmt.Sprintf("arn:aws:ec2:%s:%s:vpc-peering-connection/%s", b.Region(), b.AccountId(), *pcx.VpcPeeringConnectionId)
+	arn := genPeeringConnectionArn(b.Region(), b.AccountId(), *pcx.VpcPeeringConnectionId)
 	resource := types.NewResource(*pcx.VpcPeeringConnectionId, arn, types.ResourceTypeVpcPeeringConnection)
 
 	avi := pcx.AccepterVpcInfo

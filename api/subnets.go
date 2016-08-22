@@ -32,8 +32,12 @@ func getSubnets(b *services.Broker, vpcId string) ([]*types.Resource, error) {
 	return all, nil
 }
 
+func genSubnetArn(region string, accountId string, subnetId string) string {
+	return fmt.Sprintf("arn:aws:ec2:%s:%s:subnet/%s", region, accountId, subnetId)
+}
+
 func mapSubnet(b *services.Broker, subnet *ec2.Subnet) *types.Resource {
-	arn := fmt.Sprintf("arn:aws:ec2:%s:%s:subnet/%s", b.Region(), b.AccountId(), *subnet.SubnetId)
+	arn := genSubnetArn(b.Region(), b.AccountId(), *subnet.SubnetId)
 	resource := types.NewResource(*subnet.SubnetId, arn, types.ResourceTypeSubnet)
 
 	m := resource.Metadata

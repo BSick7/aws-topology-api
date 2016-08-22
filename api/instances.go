@@ -34,8 +34,12 @@ func getInstances(b *services.Broker, vpcId string) ([]*types.Resource, error) {
 	return all, err
 }
 
+func genInstanceArn(region string, accountId string, instanceId string) string {
+	return fmt.Sprintf("arn:aws:ec2:%s:%s:instance/%s", region, accountId, instanceId)
+}
+
 func mapInstance(b *services.Broker, instance *ec2.Instance) *types.Resource {
-	arn := fmt.Sprintf("arn:aws:ec2:%s:%s:instance/%s", b.Region(), b.AccountId(), *instance.InstanceId)
+	arn := genInstanceArn(b.Region(), b.AccountId(), *instance.InstanceId)
 	resource := types.NewResource(*instance.InstanceId, arn, types.ResourceTypeInstance)
 
 	m := resource.Metadata

@@ -29,13 +29,17 @@ func getVpcNode(b *services.Broker, vpcId string) (*types.Resource, error) {
 	}
 
 	vpc := res.Vpcs[0]
-	arn := fmt.Sprintf("arn:aws:ec2:%s:%s:vpc/%s", b.Region(), b.AccountId(), *vpc.VpcId)
+	arn := genVpcArn(b.Region(), b.AccountId(), *vpc.VpcId)
 	node := types.NewResource(*vpc.VpcId, arn, types.ResourceTypeVpc)
 
 	node.Metadata["cidr"] = *vpc.CidrBlock
 	node.Metadata["tenancy"] = *vpc.InstanceTenancy
 
 	return node, nil
+}
+
+func genVpcArn(region string, accountId, vpcId string) string {
+	return fmt.Sprintf("arn:aws:ec2:%s:%s:vpc/%s", region, accountId, vpcId)
 }
 
 func isVpcMissing(err error) bool {

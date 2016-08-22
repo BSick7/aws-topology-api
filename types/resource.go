@@ -5,8 +5,8 @@ type Resource struct {
 	Arn          string                 `json:"arn"`
 	Type         string                 `json:"type"`
 	Metadata     map[string]interface{} `json:"metadata"`
-	LinkUids     []string               `json:"linkUids"`
-	ChildrenUids []string               `json:"childrenUids"`
+	LinkArns     []string               `json:"linkArns"`
+	ChildrenArns []string               `json:"childrenArns"`
 }
 
 func NewResource(awsId string, arn string, ntype string) *Resource {
@@ -15,7 +15,7 @@ func NewResource(awsId string, arn string, ntype string) *Resource {
 		Id:           awsId,
 		Type:         ntype,
 		Metadata:     map[string]interface{}{},
-		LinkUids:     []string{},
-		ChildrenUids: []string{},
+		LinkArns:     []string{},
+		ChildrenArns: []string{},
 	}
 }

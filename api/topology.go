@@ -23,7 +23,7 @@ func GetVpcTopology(b *services.Broker, vpcId string) (types.Topology, error) {
 	var errs error
 
 	// Peering Connections
-	pcxs, err := getVpcPeeringConnections(b)
+	pcxs, err := getPeeringConnections(b)
 	if err != nil {
 		errs = multierror.Append(errs, err)
 	}
