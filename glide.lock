@@ -1,42 +1,44 @@
-hash: 21b0140d2c00159a89ff6e93f813efcf10f2a5f2466cee2d518c50c8ed2849f9
-updated: 2016-08-22T10:40:46.2099325-04:00
+hash: a335a1d6c29e86512d157016ecb807e1d538bd951637fabb85d6333b8b3cc6ab
+updated: 2016-08-22T11:12:41.8555728-04:00
 imports:
 - name: github.com/armon/go-radix
   version: 4239b77079c7b5d1243b7b4736304ce8ddb6f0f2
 - name: github.com/aws/aws-sdk-go
   version: 94673f7d41219ea3e94e4b1edc01315f14268f72
   subpackages:
+  - aws/session
   - aws
   - aws/awserr
   - service/ec2
   - aws/credentials
-  - aws/session
   - service/sts
-  - aws/awsutil
   - aws/client
-  - aws/client/metadata
-  - aws/request
-  - aws/signer/v4
-  - private/endpoints
-  - private/protocol
-  - private/protocol/ec2query
-  - private/waiter
   - aws/corehandlers
   - aws/credentials/stscreds
   - aws/defaults
+  - aws/request
+  - private/endpoints
+  - aws/awsutil
+  - aws/client/metadata
+  - aws/signer/v4
+  - private/protocol
+  - private/protocol/ec2query
+  - private/waiter
   - private/protocol/query
-  - private/protocol/rest
-  - private/protocol/query/queryutil
-  - private/protocol/xml/xmlutil
   - aws/credentials/ec2rolecreds
   - aws/credentials/endpointcreds
   - aws/ec2metadata
+  - private/protocol/rest
+  - private/protocol/query/queryutil
+  - private/protocol/xml/xmlutil
 - name: github.com/bgentry/speakeasy
   version: a1ccbf2c40dfc8ce514b5c5c6e6d1429ea6880da
 - name: github.com/go-ini/ini
   version: a2610b3a793cfa7fdf0b07038068af5ddc12aba1
 - name: github.com/gorilla/context
   version: 08b5f424b9271eedf6f9f0ce86cb9396ed337a42
+- name: github.com/gorilla/handlers
+  version: a5775781a543af3c6b9f5baf10995e4d14168950
 - name: github.com/gorilla/mux
   version: cf79e51a62d8219d52060dfc1b4e810414ba2d15
 - name: github.com/hashicorp/errwrap

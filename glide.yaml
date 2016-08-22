@@ -5,3 +5,4 @@ import:
   version: 1.4.3
 - package: github.com/hashicorp/go-multierror
 - package: github.com/hashicorp/hcl
+- package: github.com/gorilla/handlers
