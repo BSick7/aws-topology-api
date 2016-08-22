@@ -1,4 +1,4 @@
-package api
+package data
 
 /// Collects vpc peering connections for a vpc
 /// IAM Requirements:

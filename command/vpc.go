@@ -2,7 +2,7 @@ package command
 
 import (
 	"encoding/json"
-	"github.com/BSick7/aws-topology-api/api"
+	"github.com/BSick7/aws-topology-api/data"
 	"github.com/BSick7/aws-topology-api/services"
 	"github.com/mitchellh/cli"
 	"strings"
@@ -28,7 +28,7 @@ func (c *VpcCommand) Run(args []string) int {
 	}
 
 	b := services.NewBroker(nil)
-	topo, err := api.GetVpcTopology(b, vpcId)
+	topo, err := data.GetVpcTopology(b, vpcId)
 	if err != nil {
 		c.Ui.Error(err.Error())
 		return 1

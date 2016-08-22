@@ -1,4 +1,4 @@
-package api
+package data
 
 /// Collects security groups in a vpc
 /// IAM Requirements:

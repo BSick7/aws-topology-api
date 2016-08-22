@@ -1,4 +1,4 @@
-package api
+package data
 
 /// Collects ec2 instances in a vpc
 /// IAM Requirements:

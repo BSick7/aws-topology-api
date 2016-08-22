@@ -1,4 +1,4 @@
-package api
+package data
 
 import (
 	"github.com/BSick7/aws-topology-api/services"
