@@ -47,6 +47,13 @@ func GetVpcTopology(b *services.Broker, vpcId string) (types.Topology, error) {
 	}
 	resources = append(resources, subnets...)
 
+	// Security Groups
+	secGroups, err := getSecurityGroups(b, vpc.Id)
+	if err != nil {
+		errs = multierror.Append(errs, err)
+	}
+	resources = append(resources, secGroups...)
+
 	return types.Topology{
 		Vpc:       vpc,
 		Resources: resources,
