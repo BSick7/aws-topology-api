@@ -1,6 +1,6 @@
 package types
 
 type Topology struct {
-	Vpc       *Resource
-	Resources []*Resource
+	Vpc       *Resource   `json:"vpc"`
+	Resources []*Resource `json:"resources"`
 }

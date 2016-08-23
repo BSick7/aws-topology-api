@@ -4,9 +4,9 @@ import (
 	"github.com/BSick7/aws-topology-api/agent/api"
 	"github.com/BSick7/aws-topology-api/types"
 	"github.com/gorilla/handlers"
+	"log"
 	"net/http"
 	"os"
-	"log"
 )
 
 func Run(c *types.AgentConfig, appVersion string) error {
